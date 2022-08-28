@@ -1,4 +1,10 @@
 body {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  /* 字体颜色 */
+  color: black;
+  font-family: 'Open Sans', sans-serif; 
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -7,7 +13,183 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.homeHeader{
+  display: flex;
+  margin-right: 0;
+  border-bottom: 2px solid #ccc;
+  /* 边界阴影 */
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  
+}
+
+.headerSearch{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  /* 距离左边元素30% */
+  margin-top: 1.8%;
+
+  justify-content: center;
+}
+
+/* 搜索框右侧 */
+.headerExplore{
+  display: flex;
+  /* border: 20px solid #ccc; */
+  /* 搜索框右侧距离调整*/
+  margin-right: 1%;
+}
+
+/* 路由界面整体div */
+.footerPage{
+  /* display为flex的话，这个div的大小会随着内部div的大小而变化，比如下面的那个类里面的 */
+  display: flex;
+}
+
+/* ----------------------------------------------------------------------------- */
+
+/* RegisterPage背景整体布局 */
+.RegisterPage{
+  font-style: italic;
+  text-align: center;
+  /* 扩充宽高填满屏幕 */
+	width: 100%;
+  height: 809px;
+}
+
+/* register页面文字，Create you account firstly */
+.RegisterText{
+  /* div内部的调整，距离包裹此标签的div的距离 */
+  padding-top: 2%; 
+  font-size: 1.5rem;
+}
+
+/* register页面提醒文字，You need to create     */
+.RegisterRemind{
+  /* div内部的调整，距离上个标签的div的距离 */
+  margin-top: 2%;
+  font-size: 1.2rem;
+}
+
+/* register页面按钮 */
+.RegisterButton{
+  margin-top: 3%;
+}
+
+/* register的提示私钥卡片 */
+.RegisterCard{
+  /* 把子标签作为input标签，则可以使用父div中的对齐方法 */
+  display:inline-block;
+  margin-top: 2%;
+  margin-right: 4.5%;
+  /* 边界阴影 */
+  border: 2px none #ccc;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
+}
+
+/* ----------------------------------------------------------------------------- */
+
+/* 钱包页面css */
+.walletPage{
+  /* border: 20px solid rgb(201, 18, 18); */
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  text-align: center;
+  margin-top: 4%;
+}
+.walletCard{
+  background-color: aliceblue;
+  display:inline-block;
+  border: 3px none #ccc;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.walletLeft{
+  /* 左边背景颜色 */
+  background-color:rgb(192,192,192,0.1);
+  width: 300px;
+  height: 600px;
+}
+
+.walletLeftAvator{
+  display:inline-block;
+  padding-top: 17%;
+}
+
+.walletLeftPubKey{
+  /* 文字左右间距 */
+  padding-left:10px;
+  padding-right:5px;
+  padding-top: 3px;
+  /* 居中，居中前div要设置宽度 */
+  display: inline-block;
+  /* 字体格式 */
+  width: 40%;
+  height: 18px;
+  background-color: rgb(192,192,192,0.6);
+  /* 文字大小 */
+  font-size: small;
+  font-style: italic;
+
+  white-space: nowrap;/*设置不换行*/
+  overflow: hidden; /*设置隐藏*/
+  text-overflow: ellipsis; /*设置隐藏部分为省略号*/
+
+}
+
+.walletLeftBalance{
+  /* border: 20px solid rgb(201, 18, 18); */
+  display: flex;
+  background-color: rgb(131,137,150) ;
+  margin-top: 30px;
+  height: 100px;
+}
+
+.walletLeftBalanceAvatar{
+  padding-top: 25px;
+  padding-left: 20px;
+  /* border: 20px solid rgb(201, 18, 18); */
+}
+.walletLeftFooter{
+  margin-top: 30%;
+  color:rgb(131,137,150);
+  font-size: 15px;
+}
+
+/* 钱包卡片右边 */
+
+.walletRight{
+  /* 右边背景颜色 */
+  /* background-color:rgb(192,192,192,0.05); */
+  width: 600px;
+  height: 600px;
+}
+
+.walletRightBalance{
+  /* border: 20px solid rgb(201, 18, 18); */
+  display: flex;
+  margin-top: 20px;
+  height: 100px;
+}
+
+.walletRightBalanceAvatar{
+  padding-top: 25px;
+  padding-left: 40px;
+  /* border: 20px solid rgb(201, 18, 18); */
+}
+.walletRightBalanceCharge{
+  /* border: 20px solid rgb(201, 18, 18); */
+  width: 100%;
+  /* 右侧对齐 */
+  text-align: right;
+  margin-top: 4%;
+  margin-right: 30px;
 }
