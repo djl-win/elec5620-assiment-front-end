@@ -25,6 +25,7 @@ class HomeHeader extends React.Component {
       //页面还未加载时把用户的avatar存到localStorage，页面直接渲染
       localStorage.setItem('avator', 'https://api.multiavatar.com/' + window.location.href.split("=")[1] + '.png');
     }
+    
 
   }
 
