@@ -1,22 +1,24 @@
-import React from "react";
+import { FormGroup } from "@mui/material";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { FormGroup } from "@mui/material";
 import Stack from '@mui/material/Stack';
-// import fs from 'fs';
-// import * as Jimp from 'jimp/es';
-// import * as Jimp from 'jimp';
+import React from "react";
+// import base64ImageDecoder from 'b64-to-image';
+import mergeImages from 'merge-images';
 
 class Nfts extends React.Component {
+ 
   state = {
+
+    img:'',
     //是否打开对话框
     open: false,
 
@@ -71,6 +73,25 @@ class Nfts extends React.Component {
   handleNft = e => {
     e.preventDefault();
     console.log(this.state);
+
+    // Jimp;
+    var a = require('../../assets/nftLayer/background/'+ this.state.background);
+    var b = require('../../assets/nftLayer/body/'+ this.state.body);
+    var c = require('../../assets/nftLayer/eyes/' +  this.state.eyes);
+    var d = require('../../assets/nftLayer/glass/' +  this.state.glass);
+    var e = require('../../assets/nftLayer/mouth/' +  this.state.mouth);
+    var f = require('../../assets/nftLayer/outfit/' +  this.state.outfit);
+    var g = require('../../assets/nftLayer/beard/'+ this.state.beard);
+
+    var images = [a, b, c, d, e, f, g];
+
+
+    mergeImages(images).then((b64) => {
+      console.log(b64);
+      this.setState({
+        img: b64
+      })
+    });
 
   }
 
@@ -247,6 +268,7 @@ class Nfts extends React.Component {
             </Dialog>
 
           </div>
+        {/* <img src={this.state.img}></img> */}
         </div>
       </div>
     );
