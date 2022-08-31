@@ -203,7 +203,7 @@ code {
   /* font-family: Arial, Helvetica, sans-serif; */
   width: 100%;
   height: auto;
-  display: flex;
+
  
 }
 
@@ -232,4 +232,9 @@ code {
   margin-left: 10%;
   padding-left: 1%;
   padding-right: 1%;
+}
+
+/* nft页面底部图片展示 */
+.nftBody{
+
 }

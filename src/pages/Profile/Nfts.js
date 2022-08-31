@@ -13,12 +13,16 @@ import Stack from '@mui/material/Stack';
 import React from "react";
 // import base64ImageDecoder from 'b64-to-image';
 import mergeImages from 'merge-images';
+import axios from "axios";
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+
 
 class Nfts extends React.Component {
- 
+
   state = {
 
-    img:'',
+    nftBase64: '',
     //是否打开对话框
     open: false,
 
@@ -70,32 +74,96 @@ class Nfts extends React.Component {
   };
 
   //创建nft
-  handleNft = e => {
-    e.preventDefault();
+  handleNft = (event) => {
+    event.preventDefault();
     console.log(this.state);
-
+    this.handleClose();
     // Jimp;
-    var a = require('../../assets/nftLayer/background/'+ this.state.background);
-    var b = require('../../assets/nftLayer/body/'+ this.state.body);
-    var c = require('../../assets/nftLayer/eyes/' +  this.state.eyes);
-    var d = require('../../assets/nftLayer/glass/' +  this.state.glass);
-    var e = require('../../assets/nftLayer/mouth/' +  this.state.mouth);
-    var f = require('../../assets/nftLayer/outfit/' +  this.state.outfit);
-    var g = require('../../assets/nftLayer/beard/'+ this.state.beard);
+    var a = require('../../assets/nftLayer/background/' + this.state.background);
+    var b = require('../../assets/nftLayer/body/' + this.state.body);
+    var c = require('../../assets/nftLayer/eyes/' + this.state.eyes);
+    var d = require('../../assets/nftLayer/glass/' + this.state.glass);
+    var e = require('../../assets/nftLayer/mouth/' + this.state.mouth);
+    var f = require('../../assets/nftLayer/outfit/' + this.state.outfit);
+    var g = require('../../assets/nftLayer/beard/' + this.state.beard);
 
     var images = [a, b, c, d, e, f, g];
 
-
-    mergeImages(images).then((b64) => {
-      console.log(b64);
-      this.setState({
-        img: b64
+    //发送base64编码的，字节数组到后台，后台接收之后，把这个字节数组转化为图片保存到本地，地址存储到数据库中
+    mergeImages(images).then(async (b64) => {
+      // console.log(b64);
+      // this.setState({
+      //   nftBase64: b64
+      // })
+      const response = await axios({
+        method: "post",
+        url: "/5620/nfts/createNft",
+        data: { nftBase64: b64 }
+      }).catch(err => {
+        alert(err);
       })
+      if (response.data.code === 10011) {
+        alert(response.data.msg);
+      } else if (response.data.code === 10010) {
+        alert(response.data.msg);
+      } else {
+        alert("Something wrong, please retry!")
+      }
     });
+
 
   }
 
   render() {
+    const itemData = [
+      {
+        img: require('file:///D:/nftImages/0f7b706882a944a697775f652fe44646.png'),
+        title: 'Burger',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+        title: 'Camera',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
+        title: 'Coffee',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
+        title: 'Hats',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
+        title: 'Honey',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
+        title: 'Basketball',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
+        title: 'Fern',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
+        title: 'Mushrooms',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
+        title: 'Tomato basil',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
+        title: 'Sea star',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
+        title: 'Bike',
+      },
+    ];
+
+
+
     return (
       <div className="nftPage">
         <div className="nftHeader">
@@ -268,8 +336,28 @@ class Nfts extends React.Component {
             </Dialog>
 
           </div>
-        {/* <img src={this.state.img}></img> */}
+          {/* <img src={this.state.img}></img> */}
         </div>
+
+        <div className="nftBody">
+          <div className="nftBodyImageList">
+            <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+              {itemData.map((item) => (
+                <ImageListItem key={item.img}>
+                  <img
+                    src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                    srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    alt={item.title}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+            
+
+          </div>
+        </div>
+
       </div>
     );
   }
