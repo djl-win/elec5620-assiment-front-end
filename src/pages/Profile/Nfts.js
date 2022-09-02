@@ -21,6 +21,8 @@ import ImageListItem from '@mui/material/ImageListItem';
 class Nfts extends React.Component {
 
   state = {
+    //返回用户的所有nft信息
+    itemData:[],
 
     nftBase64: '',
     //是否打开对话框
@@ -43,6 +45,38 @@ class Nfts extends React.Component {
 
 
   }
+
+  //页面加载时显示用户所有的nft信息
+  componentDidMount() {
+    this.handleSearchNft();
+  }
+  //一进入页面就执行的操作，向后台发送请求，查询用户数据
+  handleSearchNft = async () => {
+
+    //发送ajax请求到后端,查询历史记录等数据
+    const response = await axios({
+      method: "get",
+      url: "/5620/nfts",
+    }).catch(err => {
+      alert(err);
+    })
+    console.log(response.data);
+
+    //封装用户nft信息
+    if (response.data.code === 40011) {
+      this.setState({
+        itemData: response.data.data
+      })
+    } else if (response.data.code === 40010) {
+      alert("Search Nfts unsuccessfuly");
+    } else {
+      alert("Something wrong in nft page, please contact the IT team");
+    }
+
+  }
+
+
+
   //dialog打开按钮
   handleClickOpen = () => {
     this.setState({
@@ -104,6 +138,7 @@ class Nfts extends React.Component {
       })
       if (response.data.code === 10011) {
         alert(response.data.msg);
+        this.handleSearchNft();
       } else if (response.data.code === 10010) {
         alert(response.data.msg);
       } else {
@@ -115,54 +150,7 @@ class Nfts extends React.Component {
   }
 
   render() {
-    const itemData = [
-      {
-        img: require('file:///D:/nftImages/0f7b706882a944a697775f652fe44646.png'),
-        title: 'Burger',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-        title: 'Camera',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-        title: 'Coffee',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-        title: 'Hats',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-        title: 'Honey',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-        title: 'Basketball',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-        title: 'Fern',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-        title: 'Mushrooms',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-        title: 'Tomato basil',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-        title: 'Sea star',
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-        title: 'Bike',
-      },
-    ];
-
-
+    const nfts = this.state.itemData;
 
     return (
       <div className="nftPage">
@@ -334,26 +322,26 @@ class Nfts extends React.Component {
                 <Button onClick={this.handleNft}>Create</Button>
               </DialogActions>
             </Dialog>
-
+            {/* <img src={require(`${'file:///D:\\nftImages\\4b49fd5488904f46b32a5e179eeadbe9.png'}`)}></img> */}
           </div>
-          {/* <img src={this.state.img}></img> */}
         </div>
 
         <div className="nftBody">
           <div className="nftBodyImageList">
             <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-              {itemData.map((item) => (
-                <ImageListItem key={item.img}>
+              {nfts.map((item) => (
+                
+                <ImageListItem key={item.nftUrl}>
                   <img
-                    src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                    srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.title}
+                    // src={require(`${item.nftUrl}?w=164&h=164&fit=crop&auto=format`)}
+                    srcSet={`${item.nftUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    alt={item.nftDescription}
                     loading="lazy"
                   />
                 </ImageListItem>
               ))}
             </ImageList>
-            
+
 
           </div>
         </div>
