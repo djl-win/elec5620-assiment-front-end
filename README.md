@@ -24,3 +24,4 @@ npm install electron --save-dev预加载库 -->
 //图片存在了本地的localstorage里面，关闭服务器的时候记得清理，logout一下
 //数据放在缓存里面不安全
 //bug新建nft时必须输入所有的属性，没加验证，不加了先
+//BUG新用户第一次新建nft时，不会把图片显示出来，后面不会

@@ -22,7 +22,7 @@ class Nfts extends React.Component {
 
   state = {
     //返回用户的所有nft信息
-    itemData:[],
+    itemData: [],
 
     nftBase64: '',
     //是否打开对话框
@@ -74,7 +74,6 @@ class Nfts extends React.Component {
     }
 
   }
-
 
 
   //dialog打开按钮
@@ -138,7 +137,7 @@ class Nfts extends React.Component {
       })
       if (response.data.code === 10011) {
         alert(response.data.msg);
-        this.handleSearchNft();
+        // this.handleSearchNft();
       } else if (response.data.code === 10010) {
         alert(response.data.msg);
       } else {
@@ -150,8 +149,7 @@ class Nfts extends React.Component {
   }
 
   render() {
-    const nfts = this.state.itemData;
-
+    //加载动态数据
     return (
       <div className="nftPage">
         <div className="nftHeader">
@@ -329,12 +327,12 @@ class Nfts extends React.Component {
         <div className="nftBody">
           <div className="nftBodyImageList">
             <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-              {nfts.map((item) => (
-                
+              {this.state.itemData.map((item) => (
+
                 <ImageListItem key={item.nftUrl}>
                   <img
-                    // src={require(`${item.nftUrl}?w=164&h=164&fit=crop&auto=format`)}
-                    srcSet={`${item.nftUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    src={require(`${'../../assets/nftWorks/'}${item.nftUrl}`)}
+                    // srcSet={`${item.nftUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.nftDescription}
                     loading="lazy"
                   />
