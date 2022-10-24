@@ -1,6 +1,6 @@
 import React from "react";
 // import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.gif'
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +11,14 @@ import AccountMenu from "./AccountMenu";
 import { Link } from "react-router-dom";
 import { storageUtils } from "../utils/storageUtils";
 import axios from "axios";
+import Notifications from "react-notifications-menu";
 
 
 class HomeHeader extends React.Component {
+  state = {
+    messages: []
+  }
+
   //hook特定依赖项，在页面更新时，只更新依赖项中的变量，不更新其他变量  const [count, setCount] = React.useState(null);    useEffect(() => {console.log(count)}, [count])
 
   //页面加载前执行一次,相当于函数组件中的useEffect，并传入一个空数组，只执行一次 useEffect(() => {}, [])
@@ -25,21 +30,39 @@ class HomeHeader extends React.Component {
       //页面还未加载时把用户的avatar存到localStorage，页面直接渲染
       localStorage.setItem('avator', 'https://api.multiavatar.com/' + window.location.href.split("=")[1] + '.png');
     }
-    
+
 
   }
 
   //页面加载前执行一次，render后会继续执行一次,相当于函数组件中的useEffect,useEffect(() => {})
   componentDidMount() {
-
+    this.checkNftOnSell();
     //页面每进行一次render，就去检测用户是否拥有钱包，如果没有钱包，就去创建钱包，存储到localStorage中
     this.checkWallet();
+  }
+
+
+  //查询用户正在出售的商品信息
+  checkNftOnSell = async () => {
+    const response = await axios({
+      method: "get",
+      url: "/5620/nfts/onSell",
+    }).catch(err => {
+      alert(err);
+    })
+    if (response.data.code === 40011) {
+      this.setState({
+        messages: response.data.data
+      })
+    } else {
+      alert(response.data.msg)
+    }
 
   }
 
   //判断是否拥有钱包,并打开menu
   checkWallet = async (event) => {
-    console.log("checkWallet");
+    // console.log("checkWallet");
 
     const response = await axios({
       method: "post",
@@ -83,23 +106,43 @@ class HomeHeader extends React.Component {
 
           <div className="headerImage">
             {/* 图片宽高 */}
-            <img src={logo} alt="logo" width={260} height={120} />
+            <img src={logo} alt="logo"
+            style={{
+              paddingLeft:"20px"
+            }}
+             width={90} height={60} 
+             />
           </div>
 
           <div className="headerSearch">
             <Paper
               component="form"
-              sx={{ p: "4px 4px", display: "flex", alignItems: "center", width: 600 }}
+              sx={{ 
+                p: "1px 1px", 
+                display: "flex", 
+                alignItems: "center", 
+                width: "40%",
+                borderRadius: "25px",
+                boxShadow: "2px 2px 0px 0px rgba(0, 0, 0, 0.1),0 8px 32px 0 rgba(202, 202, 202, 0.37)",
+               }}
             >
+              <IconButton 
+              type="button" 
+              sx={{ 
+                p: "10px" 
+                }} 
+                aria-label="search">
+                <SearchIcon />
+              </IconButton>
               <InputBase
                 className="headerSearchInput"
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ 
+                  ml: 1, 
+                  flex: 1,
+                }}
                 placeholder="Search items or accounts"
                 inputProps={{ "aria-label": "search items and accounts" }}
               />
-              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
             </Paper>
           </div>
 
@@ -109,8 +152,15 @@ class HomeHeader extends React.Component {
               {/* hover禁用背景色 */}
               {/* textTransfore禁用大写 */}
               <Button component={Link} to="/explore" variant="text" disableRipple sx={{ fontSize: 21, color: 'black', "&:hover": { backgroundColor: "transparent" }, textTransform: 'none' }}>Explore</Button>
+              <Button component={Link} to="/market" variant="text" disableRipple sx={{ fontSize: 21, color: 'black', "&:hover": { backgroundColor: "transparent" }, textTransform: 'none' }} >Market</Button>
               <Button component={Link} to="/rank" variant="text" disableRipple sx={{ fontSize: 21, color: 'black', "&:hover": { backgroundColor: "transparent" }, textTransform: 'none' }} >Rank</Button>
               <Button component={Link} to="/transaction" variant="text" disableRipple sx={{ fontSize: 21, color: 'black', "&:hover": { backgroundColor: "transparent" }, textTransform: 'none' }} >Transaction</Button>
+              <div style={{ marginTop: "18px" }}>
+                <Notifications
+                  data={this.state.messages}
+
+                />
+              </div>
               <AccountMenu />
             </Stack>
           </div>

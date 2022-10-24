@@ -1,10 +1,11 @@
+
 body {
   height: 100%;
   width: 100%;
   background-color: white;
   /* 字体颜色 */
+  font-family: "IBM Plex Sana Thai Looped", sans-serif;
   color: black;
-  font-family: 'Open Sans', sans-serif; 
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -23,9 +24,11 @@ code {
 .homeHeader{
   display: flex;
   margin-right: 0;
-  border-bottom: 2px solid #ccc;
+  /* border-bottom: 2px solid #ccc; */
   /* 边界阴影 */
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1); */
+  /* box-Shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1),0 8px 32px 0 rgba(202, 202, 202, 0.37) */
+
   
 }
 
@@ -34,7 +37,7 @@ code {
   height: 100%;
   display: flex;
   /* 距离左边元素30% */
-  margin-top: 1.8%;
+  margin-top: 0.7%;
 
   justify-content: center;
 }
@@ -228,8 +231,18 @@ code {
 .nftHeaderButtonCreateNft{
   border: 6px none #ccc;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 40%;
+  border-radius: 10%;
   margin-left: 10%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+
+.nftHeaderButtonCreateNft1{
+  border: 6px none #ccc;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10%;
+  margin-left: 3%;
   padding-left: 1%;
   padding-right: 1%;
 }

@@ -10,12 +10,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
+import Fade from '@mui/material/Fade';
 import React from "react";
 // import base64ImageDecoder from 'b64-to-image';
 import mergeImages from 'merge-images';
 import axios from "axios";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import ItemList from "../../component/NFTItemList";
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 class Nfts extends React.Component {
@@ -27,6 +29,8 @@ class Nfts extends React.Component {
     nftBase64: '',
     //是否打开对话框
     open: false,
+
+    open1: false,
 
     //nft背景
     background: '',
@@ -41,8 +45,11 @@ class Nfts extends React.Component {
     //nft外套
     outfit: '',
     //nft胡子
-    beard: ''
-
+    beard: '',
+    //nft描述
+    nftDes: '',
+    //是否加载进度条
+    loading: false
 
   }
 
@@ -60,7 +67,7 @@ class Nfts extends React.Component {
     }).catch(err => {
       alert(err);
     })
-    console.log(response.data);
+    // console.log(response.data);
 
     //封装用户nft信息
     if (response.data.code === 40011) {
@@ -83,11 +90,28 @@ class Nfts extends React.Component {
     })
   };
 
+  //dialog1打开按钮
+  handleClickOpen1 = () => {
+    this.setState({
+      open1: true,
+      nftDes: ""
+    })
+  };
+
   //dialog关闭按钮
   handleClose = () => {
     this.setState({
       open: false
     })
+  };
+
+  //dialog1关闭按钮
+  handleClose1 = () => {
+    this.setState({
+      open1: false,
+      nftDes: ""
+    })
+
   };
 
   //表单处理
@@ -137,14 +161,73 @@ class Nfts extends React.Component {
       })
       if (response.data.code === 10011) {
         alert(response.data.msg);
-        // this.handleSearchNft();
+        this.handleSearchNft();
       } else if (response.data.code === 10010) {
         alert(response.data.msg);
       } else {
         alert("Something wrong, please retry!")
       }
     });
+  }
 
+  //通过描述创建NFT
+  handleNft1 = async () => {
+    //判断是否加载动画
+    this.setState({
+      loading: true
+    })
+    const novelAi = {
+      "input": "masterpiece, best quality, " + this.state.nftDes + ".",
+      "model": "safe-diffusion",
+      "parameters": {
+        "width": 1024,
+        "height": 1024,
+        "scale": 11,
+        "sampler": "k_euler_ancestral",
+        "steps": 28,
+        "seed": 616118412,
+        "n_samples": 1,
+        "ucPreset": 0,
+        "qualityToggle": true,
+        "uc": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry"
+      }
+    }
+
+    const response = await axios({
+      method: "post",
+      url: "https://api.novelai.net/ai/generate-image",
+      data: novelAi,
+      headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVOOHhuOVBacWFDSkN1NDQwNVV4VCIsIm5jIjoiVFk0eXlZRE40cWtIOHY3MTI2ZWxuIiwiaWF0IjoxNjY2NTI3MzMyLCJleHAiOjE2NjkxMTkzMzJ9.yDkf8G6uv0AGdb5bt-0FdDVJlWYZ-L0kxtuqldF8ljw" }
+    }).catch(err => {
+      alert(err);
+    })
+
+    if (response.status === 201) {
+      const res = await axios({
+        method: "post",
+        url: "/5620/nfts/createNft",
+        data: { nftBase64: response.data }
+      }).catch(err => {
+        alert(err);
+      })
+      if (res.data.code === 10011) {
+        this.handleClose1();
+        alert(res.data.msg);
+        this.handleSearchNft();
+      } else if (res.data.code === 10010) {
+        alert(res.data.msg);
+      } else {
+        alert("Something wrong, please retry!")
+      }
+    } else {
+      alert("Something wrong, please retry! Contact Jiale!")
+    }
+    //判断是否加载动画
+    this.setState({
+      loading: false
+    })
+    this.handleClose1();
+    this.handleSearchNft();
 
   }
 
@@ -155,7 +238,7 @@ class Nfts extends React.Component {
         <div className="nftHeader">
           <h1 className="nftHeaderText">Enter the World</h1>
           <div className="nftHeaderButtonCreateNft">
-            <Button onClick={this.handleClickOpen} color="success" disableRipple sx={{ "&:hover": { backgroundColor: "transparent" }, color: 'black', fontSize: 20, textTransform: 'none' }}> Go</Button>
+            <Button onClick={this.handleClickOpen} color="success" disableRipple sx={{ "&:hover": { backgroundColor: "transparent" }, color: 'black', fontSize: 20, textTransform: 'none' }}> Type1</Button>
             <Dialog open={this.state.open} onClose={this.handleClose}>
               <DialogTitle>Creat NFT</DialogTitle>
               <DialogContent>
@@ -322,23 +405,74 @@ class Nfts extends React.Component {
             </Dialog>
             {/* <img src={require(`${'file:///D:\\nftImages\\4b49fd5488904f46b32a5e179eeadbe9.png'}`)}></img> */}
           </div>
+
+          <div className="nftHeaderButtonCreateNft1">
+            <Button onClick={this.handleClickOpen1} color="success" disableRipple sx={{ "&:hover": { backgroundColor: "transparent" }, color: 'black', fontSize: 20, textTransform: 'none' }}> Type2</Button>
+            {/* 进度条 */}
+            <Dialog
+              open={this.state.open1}
+              onClose={this.handleClose1}
+              sx={{
+                fontFamily: 'Nunito Sans',
+                fontStyle: "normal"
+              }}
+            >
+              <Fade
+                in={this.state.loading}
+                style={{
+                  transitionDelay: this.state.loading ? '800ms' : '0ms',
+                }}
+                unmountOnExit
+
+              >
+                <CircularProgress style={{
+                  width: '50px',
+                  height: '50px',
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  margin: 'auto',
+                }}
+                  color="secondary"
+                />
+              </Fade>
+              <DialogTitle
+                sx={{
+                  fontSize: "25px",
+                  fontWeight: "bold"
+                }}
+              >Create NFT</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please enter the description of this NFT you would like to create
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Description"
+                  name="nftDes"
+                  type="description"
+                  fullWidth
+                  variant="standard"
+                  value={this.state.nftDes}
+                  onChange={this.handleChange}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose1} sx={{ textTransform: 'none' }}>Cancel</Button>
+                <Button onClick={this.handleNft1} sx={{ textTransform: 'none' }}>Create</Button>
+              </DialogActions>
+            </Dialog>
+
+
+          </div>
         </div>
 
         <div className="nftBody">
           <div className="nftBodyImageList">
-            <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-              {this.state.itemData.map((item) => (
-
-                <ImageListItem key={item.nftUrl}>
-                  <img
-                    src={require(`${'../../assets/nftWorks/'}${item.nftUrl}`)}
-                    // srcSet={`${item.nftUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.nftDescription}
-                    loading="lazy"
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            <ItemList listData={this.state.itemData}></ItemList>
 
 
           </div>

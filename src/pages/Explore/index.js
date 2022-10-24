@@ -1,13 +1,14 @@
 import React from "react";
+import ExploreSlide from "../../component/ExploreSlider";
 
 class Explore extends React.Component {
   render() {
     return (
       <div>
-        <h1>Explore</h1>
-        <h1>Explore</h1>
-        <h1>Explore</h1>
-        <h1>Explore</h1>
+        <div>
+        <ExploreSlide/>
+        </div>
+
       </div>
     );
   }
