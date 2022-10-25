@@ -1,13 +1,12 @@
 import React from "react";
+import TitleHeader from "../../component/TitleHeader";
 
 class Transaction extends React.Component {
   render() {
     return (
       <div>
-        <h1>Transaction</h1>
-        <h1>Transaction</h1>
-        <h1>Transaction</h1>
-        <h1>Transaction</h1>
+        <TitleHeader Title= {"Transaction"} />
+        
       </div>
     );
   }

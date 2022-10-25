@@ -1,5 +1,6 @@
 import React from "react";
 import ExploreSlide from "../../component/ExploreSlider";
+import ExploreBody from "../../component/ExporeBody";
 
 class Explore extends React.Component {
   render() {
@@ -8,7 +9,9 @@ class Explore extends React.Component {
         <div>
         <ExploreSlide/>
         </div>
-
+        <div>
+        <ExploreBody />
+        </div>
       </div>
     );
   }

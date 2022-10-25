@@ -1,13 +1,14 @@
 import React from "react";
+import MarketItemList from "../../component/MarketItemList";
+import TitleHeader from "../../component/TitleHeader";
 
 class Market extends React.Component {
   render() {
     return (
       <div>
-        <h1>Market</h1>
-        <h1>Market</h1>
-        <h1>Market</h1>
-        <h1>Market</h1>
+        <TitleHeader Title= {"MarketPlace"} />
+        <MarketItemList />
+        
       </div>
     );
   }

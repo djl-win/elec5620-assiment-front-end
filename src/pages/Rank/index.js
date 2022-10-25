@@ -1,13 +1,12 @@
 import React from "react";
+import TitleHeader from "../../component/TitleHeader";
 
 class Rank extends React.Component {
   render() {
     return (
       <div>
-        <h1>Rank</h1>
-        <h1>Rank</h1>
-        <h1>Rank</h1>
-        <h1>Rank</h1>
+        <TitleHeader Title={"Rank"} />
+
       </div>
     );
   }

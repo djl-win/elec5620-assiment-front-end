@@ -167,9 +167,8 @@ export default function ItemList({ listData }) {
 
             <ImageList
                 sx={{
-                    width: "1800px",
-                    marginLeft: "40px",
-                    paddingRight: "30px",
+                    width: "1700px",
+                    paddingLeft: "70px",
                     paddingTop: "15px",
                     paddingBottom: "30px",
 
@@ -182,7 +181,6 @@ export default function ItemList({ listData }) {
                             alignItems: "center"
                         }}
                         key={item.nft.nftUrl}
-                        onClick={() => handleOpen(item)}
                     >
                         <Paper
                             sx={{
@@ -294,20 +292,22 @@ export default function ItemList({ listData }) {
                                             width: "25px",
                                             marginTop: "-1px",
                                             borderRadius: "15px",
-                                            marginLeft: "50%"
+                                            marginLeft: "40%"
                                         }}
                                         alt="wrong"
                                         src={logo}
                                     />
                                     <div
                                         style={{
+                                            
+                                            
                                             marginTop: "-4px",
                                             fontSize: "20px",
                                             color: "black",
                                         }}
                                     >
 
-                                        {'\u00A0'}{'\u00A0'}{item.nft.nftPrice} {'\u00A0'}ATX
+                                        {'\u00A0'}{'\u00A0'}{item.nft.nftPrice}{'\u00A0'}ATX
 
                                     </div>
                                 </div>

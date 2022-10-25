@@ -93,6 +93,11 @@ export default function AccountMenu() {
         >
           Follws
         </MenuItem>
+        <MenuItem
+          component={Link} to='/profile/order'
+        >
+          Order
+        </MenuItem>
 
         <Divider />
 

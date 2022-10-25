@@ -184,7 +184,7 @@ class Nfts extends React.Component {
         "height": 1024,
         "scale": 11,
         "sampler": "k_euler_ancestral",
-        "steps": 28,
+        "steps": 38,
         "seed": 616118412,
         "n_samples": 1,
         "ucPreset": 0,
@@ -210,6 +210,7 @@ class Nfts extends React.Component {
       }).catch(err => {
         alert(err);
       })
+
       if (res.data.code === 10011) {
         this.handleClose1();
         alert(res.data.msg);

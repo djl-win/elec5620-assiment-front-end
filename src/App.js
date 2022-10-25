@@ -10,6 +10,8 @@ import Wallet from "./pages/Profile/Wallet";
 import Rank from "./pages/Rank";
 import Transaction from "./pages/Transaction";
 import Market from "./pages/Market";
+import Order from "./pages/Profile/Order";
+import Person from "./pages/Person";
 
 
 function App() {
@@ -31,13 +33,15 @@ function App() {
               <Route path="/profile/wallet" component={Wallet} />
               <Route path="/profile/nfts" component={Nfts} />
               <Route path="/profile/follows" component={Follows} />
+              <Route path="/profile/order" component={Order} />
               <Route path="/market" component={Market}/>
+              <Route path="/person" component={Person}/>
               <Redirect to="/explore"></Redirect>
             </Switch>
           </div>
-          
         </Stack>
       </Box>
+
     </div>
    </Router>
 
