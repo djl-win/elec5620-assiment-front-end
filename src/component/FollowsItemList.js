@@ -14,6 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { error} from '../utils/message.js'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -64,7 +65,7 @@ export default function ItemList({ listData }) {
             url: "/5620/follows/cancelFollow",
             data: temp
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 20011) {
             alert(response.data.msg)
@@ -244,12 +245,14 @@ export default function ItemList({ listData }) {
                                     style={{
                                         fontSize: "18px",
                                         marginLeft: "15px",
-                                        color: "#1E2329"
+                                        color: "#1E2329",
+                                        display:"flex"
                                     }}
-                                >{item.nft.nftDescription}
+                                >{item.nft.nftDescription}{'\u00A0'}#{item.nft.nftId}
                                     <Badge
                                         sx={{
-                                            marginLeft: '45%'
+                                            marginLeft: "auto",
+                                            marginRight:"20px"
                                         }}
                                         badgeContent={item.nft.nftLikes} color="secondary">
                                         <FavoriteBorderIcon />

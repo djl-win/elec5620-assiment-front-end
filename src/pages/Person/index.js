@@ -9,9 +9,107 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { Link } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import { error, success } from '../../utils/message.js'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from "axios";
+import { toast } from 'react-toastify';
+import {useHistory} from 'react-router-dom';
 
 const Person = (props) => {
-    const [item, setItem] = useState(props.location.state.item)
+    const history = useHistory();
+
+    const [item, setItem] = useState(props.location.state.item);
+    const [verification, setVerification] = useState(true);
+    const [privateKey, setPrivateKey] = useState("");
+    const [privateKeyTextShow, setPrivateKeyTextShow] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [bid, setBid] = useState("")
+
+    const handleClose = () => {
+        setBid("")
+        setOpen(false);
+    }
+
+    const handleOpen = () => {
+        toast.info("Note: After you bid, we will deduct the appropriate ATX from your wallet and send you NFT when the seller agrees, otherwise we will return your ATX after 24 hours.", {
+            position: "top-center",
+            autoClose: 15000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        })
+        setOpen(true);
+    }
+
+    const handleChange = (event) => {
+        setPrivateKey(event.target.value);
+    }
+
+    const handleChange1 = (event) => {
+        setBid(event.target.value);
+    }
+
+    const handleVerify = async () => {
+
+        item.privateKey = privateKey;
+
+        const response = await axios({
+            method: "post",
+            url: "/5620/wallets/verify",
+            data: item
+        }).catch(err => {
+            alert(err);
+        })
+
+        if (response.data.code === 40011) {
+            success("Next to send an offer")
+            setVerification(false);
+            setPrivateKeyTextShow(true);
+        } else {
+            error(response.data.msg)
+        }
+        setPrivateKey("")
+
+    }
+
+    const handleBid = async (event) => {
+        //Back-end api: 1. Check whether the input number is positive. 2. Check whether the user has enough money. Deduct the corresponding amount 4. Add the order record
+        if (/^[0-9]+.?[0-9]*$/.test(bid) && bid > 0) {
+
+            item.bid = bid;
+
+            const response = await axios({
+                method: "post",
+                url: "/5620/orders/bid",
+                data: item
+            }).catch(err => {
+                alert(err);
+            })
+
+            if (response.data.code === 10011) {
+                success(response.data.msg);
+                //After the return value is ok, the next operation is routed to the order page.
+                history.push('/profile/order');
+            } else {
+                error(response.data.msg)
+                setBid("")
+            }
+        } else {
+            error("Wrong input, please enter positive integers")
+            setBid("")
+        }
+
+    }
 
 
     return (
@@ -126,7 +224,7 @@ const Person = (props) => {
                                 }}
                             >
 
-                                {'\u00A0'}{'\u00A0'}{item.nft.nftPrice}{'\u00A0'}ATX
+                                {'\u00A0'}{item.nft.nftPrice}{'\u00A0'}ATX
 
                             </div>
                         </div>
@@ -141,13 +239,48 @@ const Person = (props) => {
                         >Contact:{'\u00A0'}{item.userDetail.userDetailEmail}
                         </div>
 
+                        <div style={{
+                            marginTop: "30px",
+                            display: "flex"
+                        }}>
+                            Enter your wallet private key to authenticate
+                        </div>
+
+                        <div style={{
+                            display: "flex",
+                            marginTop: "10px",
+                        }}>
+                            <TextField
+                                disabled={privateKeyTextShow}
+                                id="standard-basic"
+                                value={privateKey}
+                                onChange={handleChange}
+                                label="Pri key"
+                                type="password"
+                                variant="standard"
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                disabled={privateKeyTextShow}
+                                                onClick={handleVerify}
+                                                edge="end"
+                                            >
+                                                <VerifiedIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+
+                                }}
+
+                            />
+                        </div>
                         <div
                             style={{
-                                marginTop: "200px",
+                                marginTop: "160px",
                                 display: "flex"
                             }}
                         >
-                            <Button color = "error" variant="contained" size="large" endIcon={<KeyboardReturnIcon />}
+                            <Button color="error" variant="contained" size="large" endIcon={<KeyboardReturnIcon />}
                                 component={Link} to="/market"
                                 sx={{
                                     width: "200px"
@@ -155,9 +288,10 @@ const Person = (props) => {
                             >
                                 Return
                             </Button>
-                            <Button variant="contained" size="large" endIcon={<SendIcon />}
+                            <Button variant="contained" disabled={verification} size="large" endIcon={<SendIcon />}
+                                onClick={handleOpen}
                                 sx={{
-                                    marginLeft:"20px"
+                                    marginLeft: "20px"
                                 }}>
                                 Make an offer
                             </Button>
@@ -165,8 +299,49 @@ const Person = (props) => {
 
                     </div>
                 </Stack>
+                <Dialog
+                    fullWidth={true}
+                    maxWidth="xs"
+                    open={open}
+                    onClose={handleClose}
+                    sx={{
+                        marginTop: "-150px",
+                        fontFamily: 'Nunito Sans',
+                        fontStyle: "normal"
+                    }}
+                >
+                    <DialogTitle
+                        sx={{
+                            fontSize: "25px",
+                            fontWeight: "bold"
+                        }}
+                    >Send your offer</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Please enter your bidding price
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Bid"
+                            name="bid"
+                            type="bid"
+                            fullWidth
+                            variant="standard"
+                            value={bid}
+                            onChange={handleChange1}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">ATX</InputAdornment>,
+                            }}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} sx={{ textTransform: 'none' }}>Cancel</Button>
+                        <Button onClick={handleBid} sx={{ textTransform: 'none' }}>Bid</Button>
+                    </DialogActions>
+                </Dialog>
             </Card>
-        </div>
+        </div >
     );
 };
 

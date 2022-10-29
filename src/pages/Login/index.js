@@ -1,11 +1,5 @@
 import * as React from "react";
-// import Box from "@mui/material/Box"; 布局
-// import FormControl from "@mui/material/FormControl";
-// import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
-// import InputLabel from "@mui/material/InputLabel";
-// import OutlinedInput from "@mui/material/OutlinedInput";
-// import Grid from "@material-ui/core/Grid";布局
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import axios from "axios";
 
@@ -18,17 +12,8 @@ class Login extends React.Component {
         submitted: false,
     }
 
+    //Optimize handlechange
     handleChange = event => {
-        // //获取当前dom对象
-        // const target = e.target;
-        // //获取当前dom对象的name属性
-        // const name = target.name;
-        // //获取当前dom对象的value属性
-        // const value = target.type === 'checkbox' ? target.checked : target.value;
-        // //更新状态
-        // this.setState({
-        //     [name]: value
-        // })
         const { formData } = this.state;
         formData[event.target.name] = event.target.value;
         this.setState({ formData });
@@ -52,8 +37,6 @@ class Login extends React.Component {
         }).catch(err => {
             console.log(err);
         })
-        //打印响应数据
-        console.log(response.data);
 
     };
 
@@ -94,7 +77,6 @@ class Login extends React.Component {
                         errorMessages={['this field is required']}
                     />
                     <br />
-                    {/* 对齐标签 */}
 
                     <Button
                         disabled={submitted}

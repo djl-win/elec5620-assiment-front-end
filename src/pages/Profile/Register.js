@@ -12,21 +12,21 @@ class Register extends React.Component {
 
   state = {
 
-    //申请钱包显示
+    //Application wallet display
     showRegisterPage: 'block',
 
-    //提示卡片显示
+    //Prompt card display
     showRegisterCard: 'none',
 
-    //私钥信息
+    //The private key information
     priKey: ''
 
   }
 
-  //创建钱包，之后不更新localstorage的问题没解决
+  //Create a wallet
   handleCreateWallet = async (event) => {
 
-    //组织默认事件
+    //Blocking default events
     event.preventDefault();
 
     // make axios post request
@@ -37,15 +37,15 @@ class Register extends React.Component {
       alert(err);
     })
 
-    // 判断是否新建成功
+    // Check whether the creation succeeds
     if (response.data.code === 30011) {
 
-      //更新成功后，用户便有了钱包，设置路由到/profile/wallet
+      //After the update is successful, the user has a wallet and is set up to route to /profile/wallet
       localStorage.setItem('walletsJudge', '/profile/wallet');
 
       console.log(response.data.msg);
 
-      //点击创建后反馈给用户他的私钥信息，把卡片设置为显示,把页面信息设置为不显示，内容设置为私钥信息
+      //Click Create and feedback to the user his private key information, set the card as display, set the page information as not display, and set the content as private key information
       this.setState({
         showRegisterPage: 'none',
         showRegisterCard: 'block',

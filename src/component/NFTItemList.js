@@ -14,6 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
 import Badge from '@mui/material/Badge';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { error } from '../utils/message.js'
 
 export default function ItemList({ listData }) {
 
@@ -40,18 +41,18 @@ export default function ItemList({ listData }) {
 
 
         nft.nftPrice = nftPrice;
-        //发送ajax请求到后端,查询历史记录等数据
+        //Send ajax requests to the back end to query for history and other data
         const response = await axios({
             method: "put",
             url: "/5620/nfts/sellNft",
             data: nft
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 30011) {
             alert(response.data.msg)
         } else {
-            alert("Wrong");
+            error("Wrong");
         }
         handleClose();
         window.location.reload(false);

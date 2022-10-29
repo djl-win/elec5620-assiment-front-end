@@ -12,7 +12,7 @@ export default function Follows() {
   }, [])
 
   const handlefollowsNft = async() =>{
-    //发送ajax请求到后端,查询历史记录等数据
+    //Send ajax requests to the back end to query for history and other data
     const response = await axios({
       method: "get",
       url: "/5620/follows/getFollowedNfts",
@@ -21,7 +21,7 @@ export default function Follows() {
     })
     // console.log(response.data);
 
-    //封装用户nft信息
+    //Encapsulate user nft information
     if (response.data.code === 40011) {
       setFollowsNft(response.data.data)
       
@@ -33,7 +33,10 @@ export default function Follows() {
   }
 
   return (
-    <div className="followsPage">
+    <div className="followsPage"
+    style={{
+      width:"100%",
+    }}>
       <Stack
         spacing={0}
       >

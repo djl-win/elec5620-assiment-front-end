@@ -2,8 +2,9 @@ import React from "react";
 import ExploreSlide from "../../component/ExploreSlider";
 import ExploreBody from "../../component/ExporeBody";
 
-class Explore extends React.Component {
-  render() {
+export default function Explore(){
+
+
     return (
       <div>
         <div>
@@ -14,7 +15,5 @@ class Explore extends React.Component {
         </div>
       </div>
     );
-  }
+  
 };
-
-export default Explore;

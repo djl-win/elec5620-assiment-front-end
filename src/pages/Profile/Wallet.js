@@ -12,102 +12,98 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { error, success } from '../../utils/message.js'
 
 class Wallet extends React.Component {
 
   state = {
-    //dialog的显示
+    //dialog visible
     open: false,
-    //要充值的金额
+    //amount to charge
     charge: {
       amount: ''
     },
-    
-    //钱包的信息
+
+    //info of wallet
     wallet: {
-      accountId:'',
-      accountPublicKey:'',
-      accountAvatar:'',
-      accountBalance:'',
-      accountDeleted:'',
-      accountUserId:''
+      accountId: '',
+      accountPublicKey: '',
+      accountAvatar: '',
+      accountBalance: '',
+      accountDeleted: '',
+      accountUserId: ''
     },
-    
-    //历史记录信息
-    historyLog:[]
+
+    //history log
+    historyLog: []
 
   }
 
-  //页面加载前执行一次，render后会继续执行一次,相当于函数组件中的useEffect,useEffect(() => {})
   componentDidMount() {
     this.handleSearch();
   }
 
-  //页面的states变化就会执行
-  componentDidUpdate() {
-    // this.handleSearch();
-  }
 
-  //一进入页面就执行的操作，向后台发送请求，查询用户数据
   handleSearch = async () => {
 
-    //发送ajax请求到后端,查询历史记录等数据
+    //sent ajax to back end
     const response = await axios({
       method: "get",
       url: "/5620/wallets",
     }).catch(err => {
-      alert(err);
+      error(err);
     })
 
 
-    //封装用户钱包信息
-    if(response.data.code === 40011){
+    //encapsulate wallet info
+    if (response.data.code === 40011) {
       this.setState({
         wallet: response.data.data.account,
         historyLog: response.data.data.searchList
       })
-    } else if(response.data.code === 40010){
-      alert(response.data.msg);
-    } else{
-      alert("Something wrong, please contact the IT team");
+    } else if (response.data.code === 40010) {
+      error(response.data.msg);
+    } else {
+      error("Something wrong, please contact the IT team");
     }
   }
 
 
-  //dialog里面的充值按钮
+  //dialog charge function
   handleCharge = async (event) => {
 
-    //组织默认事件
     event.preventDefault();
 
-    //发送ajax请求到后端
+    //send ajax to back end
     const response = await axios({
       method: "put",
       url: "/5620/wallets",
       data: this.state.charge
     }).catch(err => {
-      alert(err);
+      error(err);
     })
 
-    //设置长值页面不可见
+    if (response.data.code === 30011) {
+      //charge successfully
+      success(response.data.msg);
+      this.handleSearch();
+    } else {
+      error(response.data.msg);
+    }
+    //set dialog invisible
     this.setState({
       open: false
     })
-
-    //充值成功之后可以设置一些操作，这里还没
-    alert(response.data.msg);
-    this.handleSearch();
   }
 
-  //dialog打开按钮
+  //dialog open
   handleClickOpen = () => {
     this.setState({
       open: true
     })
   };
 
-  //dialog关闭按钮
+  //dialog close
   handleClose = () => {
     this.setState({
       open: false
@@ -115,6 +111,7 @@ class Wallet extends React.Component {
   };
 
   render() {
+ 
     const columns = [
       { field: "logId", headerName: "ID", width: 100 },
       { field: "logPrice", headerName: "Top-up amount", width: 160 },
@@ -122,9 +119,9 @@ class Wallet extends React.Component {
       { field: "logStatus", headerName: "Top-up status", width: 160 },
     ];
 
-    const rows = 
+    const rows =
       this.state.historyLog;
-    
+
 
     return (
       <div
@@ -198,9 +195,9 @@ class Wallet extends React.Component {
                       {this.state.wallet.accountBalance}{"\u00a0"}ATX
                     </div>
                     <div className="walletRightBalanceCharge">
-                     
-                      <Button onClick={this.handleClickOpen} variant="outlined" color="primary" sx={{fontSize: 15, textTransform: 'none' }}>Charge</Button>
-                      
+
+                      <Button onClick={this.handleClickOpen} variant="outlined" color="primary" sx={{ fontSize: 15, textTransform: 'none' }}>Charge</Button>
+
                       <Dialog open={this.state.open} onClose={this.handleClose}>
                         <DialogTitle>Charge</DialogTitle>
                         <DialogContent>

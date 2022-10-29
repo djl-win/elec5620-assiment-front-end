@@ -18,7 +18,7 @@ export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  //判断是否拥有钱包,并打开menu
+  //Determine if user have the wallet and open menu
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     // make axios post request
@@ -103,8 +103,8 @@ export default function AccountMenu() {
 
 
         <MenuItem
-          // 跨域到8080不在一个服务器内，懒得改了，凑合用吧，后期再改
-          onClick={() => { window.location.href = "http://localhost:8080/5620/pages/sign.html"; 
+          // Cross-domain to 8080, the front and back ends are not on the same server
+          onClick={() => { window.location.href = "http://localhost:8080/5620/pages/mIndex.html"; 
           storageUtils.removeUser(); 
           localStorage.removeItem('walletsJudge');
           localStorage.removeItem('avator'); }}

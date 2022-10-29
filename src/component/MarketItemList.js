@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
+import { error} from '../utils/message.js'
 
 const MarketItemList = () => {
 
@@ -29,13 +30,13 @@ const MarketItemList = () => {
             method: "get",
             url: "/5620/nfts/market/" + page,
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 40011) {
             setListData(response.data.data)
 
         } else if (response.data.code === 40010) {
-            alert(response.data.msg)
+            error(response.data.msg)
         }
     }
 
@@ -44,13 +45,13 @@ const MarketItemList = () => {
             method: "get",
             url: "/5620/nfts/market/count",
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 40011) {
             setCount(response.data.data)
 
         } else if (response.data.code === 40010) {
-            alert(response.data.msg)
+            error(response.data.msg)
         }
     }
 
@@ -157,12 +158,14 @@ const MarketItemList = () => {
                                     style={{
                                         fontSize: "18px",
                                         marginLeft: "15px",
-                                        color: "#1E2329"
+                                        color: "#1E2329",
+                                        display:"flex"
                                     }}
-                                >{item.nft.nftDescription}
+                                >{item.nft.nftDescription}{'\u00A0'}#{item.nft.nftId}
                                     <Badge
                                         sx={{
-                                            marginLeft: '45%'
+                                            marginLeft: "auto",
+                                            marginRight:"20px"
                                         }}
                                         badgeContent={item.nft.nftLikes} color="secondary">
                                         <FavoriteBorderIcon />

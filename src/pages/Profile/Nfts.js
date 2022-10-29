@@ -12,85 +12,84 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Fade from '@mui/material/Fade';
 import React from "react";
-// import base64ImageDecoder from 'b64-to-image';
 import mergeImages from 'merge-images';
 import axios from "axios";
 import ItemList from "../../component/NFTItemList";
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import { error, success } from '../../utils/message.js'
 
 class Nfts extends React.Component {
 
   state = {
-    //返回用户的所有nft信息
+    //Returns all NFTS of the user
     itemData: [],
 
     nftBase64: '',
-    //是否打开对话框
+    //Open the dialog box
     open: false,
 
     open1: false,
 
-    //nft背景
+    //NFT background
     background: '',
-    //nft身体
+    //nft body
     body: '',
-    //nft眼睛
+    //nft eyes
     eyes: '',
-    //nft眼镜
+    //nft glass
     glass: '',
-    //nft嘴巴
+    //nft mouth
     mouth: '',
-    //nft外套
+    //nft outfit
     outfit: '',
-    //nft胡子
+    //nft bread
     beard: '',
-    //nft描述
+    //nft des
     nftDes: '',
-    //是否加载进度条
+    //loading animation
     loading: false
 
   }
 
-  //页面加载时显示用户所有的nft信息
+  // Displays all NFTS of the user when the page loads
   componentDidMount() {
     this.handleSearchNft();
   }
-  //一进入页面就执行的操作，向后台发送请求，查询用户数据
+  // Send a request to the backend to query user data
   handleSearchNft = async () => {
 
-    //发送ajax请求到后端,查询历史记录等数据
+    // Send an ajax request to the backend to query historical data
     const response = await axios({
       method: "get",
       url: "/5620/nfts",
     }).catch(err => {
-      alert(err);
+      error(err);
     })
     // console.log(response.data);
 
-    //封装用户nft信息
+    //Encapsulate user nft information
     if (response.data.code === 40011) {
       this.setState({
         itemData: response.data.data
       })
     } else if (response.data.code === 40010) {
-      alert("Search Nfts unsuccessfuly");
+      error("Search Nfts unsuccessfuly");
     } else {
-      alert("Something wrong in nft page, please contact the IT team");
+      error("Something wrong in nft page, please contact the IT team");
     }
 
   }
 
 
-  //dialog打开按钮
+  //dialog open
   handleClickOpen = () => {
     this.setState({
       open: true
     })
   };
 
-  //dialog1打开按钮
+  //dialog1 open
   handleClickOpen1 = () => {
     this.setState({
       open1: true,
@@ -98,14 +97,22 @@ class Nfts extends React.Component {
     })
   };
 
-  //dialog关闭按钮
+  //dialog close
   handleClose = () => {
     this.setState({
-      open: false
+      open: false,
+      background: '',
+      body: '',
+      eyes: '',
+      glass: '',
+      mouth: '',
+      outfit: '',
+      beard: '',
+      nftDes: '',
     })
   };
 
-  //dialog1关闭按钮
+  //dialog1 close
   handleClose1 = () => {
     this.setState({
       open1: false,
@@ -114,23 +121,19 @@ class Nfts extends React.Component {
 
   };
 
-  //表单处理
+  //form close
   handleChange = e => {
     e.preventDefault();
-    //获取当前dom对象
     const target = e.target;
-    //获取当前dom对象的name属性
     const name = target.name;
-    //获取当前dom对象的value属性
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    //更新状态
     this.setState({
       [name]: value
     })
 
   };
 
-  //创建nft
+  //create nft
   handleNft = (event) => {
     event.preventDefault();
     console.log(this.state);
@@ -146,33 +149,29 @@ class Nfts extends React.Component {
 
     var images = [a, b, c, d, e, f, g];
 
-    //发送base64编码的，字节数组到后台，后台接收之后，把这个字节数组转化为图片保存到本地，地址存储到数据库中
+    //Send a Base64-encoded byte array to the background, and after the background receives it, convert the byte array into a picture and save it locally, and store the address in the database
     mergeImages(images).then(async (b64) => {
-      // console.log(b64);
-      // this.setState({
-      //   nftBase64: b64
-      // })
       const response = await axios({
         method: "post",
         url: "/5620/nfts/createNft",
         data: { nftBase64: b64 }
       }).catch(err => {
-        alert(err);
+        error(err);
       })
       if (response.data.code === 10011) {
         alert(response.data.msg);
-        this.handleSearchNft();
+        window.location.reload(false);
       } else if (response.data.code === 10010) {
-        alert(response.data.msg);
+        error(response.data.msg);
       } else {
-        alert("Something wrong, please retry!")
+        error("Something wrong, please retry!")
       }
     });
   }
 
-  //通过描述创建NFT
+  //Create NFTS by description
   handleNft1 = async () => {
-    //判断是否加载动画
+    //Determine whether to load the animation
     this.setState({
       loading: true
     })
@@ -197,9 +196,9 @@ class Nfts extends React.Component {
       method: "post",
       url: "https://api.novelai.net/ai/generate-image",
       data: novelAi,
-      headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVOOHhuOVBacWFDSkN1NDQwNVV4VCIsIm5jIjoiVFk0eXlZRE40cWtIOHY3MTI2ZWxuIiwiaWF0IjoxNjY2NTI3MzMyLCJleHAiOjE2NjkxMTkzMzJ9.yDkf8G6uv0AGdb5bt-0FdDVJlWYZ-L0kxtuqldF8ljw" }
+      headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNFZnBzUmZZWVhmWFltUVVKVlJxbCIsIm5jIjoiOHRrS2t4elRfRGp1QjRTLUdsNTVRIiwiaWF0IjoxNjY3MDQ2MjM2LCJleHAiOjE2Njk2MzgyMzZ9.q4diuk7Q2ACaIiBrgN_t5k36PtzJNfJAo_oCtO__vOs" }
     }).catch(err => {
-      alert(err);
+      error(err);
     })
 
     if (response.status === 201) {
@@ -208,32 +207,31 @@ class Nfts extends React.Component {
         url: "/5620/nfts/createNft",
         data: { nftBase64: response.data }
       }).catch(err => {
-        alert(err);
+        error(err);
       })
 
       if (res.data.code === 10011) {
-        this.handleClose1();
-        alert(res.data.msg);
-        this.handleSearchNft();
+        success(res.data.msg);
       } else if (res.data.code === 10010) {
-        alert(res.data.msg);
+        error(res.data.msg);
       } else {
-        alert("Something wrong, please retry!")
+        error("Something wrong, please retry!")
       }
     } else {
-      alert("Something wrong, please retry! Contact Jiale!")
+      error("Something wrong, please retry! Contact Jiale!")
     }
-    //判断是否加载动画
+    //Determine whether to load the animation
     this.setState({
       loading: false
     })
+
     this.handleClose1();
     this.handleSearchNft();
 
   }
 
   render() {
-    //加载动态数据
+    //Loading dynamic Data
     return (
       <div className="nftPage">
         <div className="nftHeader">
@@ -252,7 +250,7 @@ class Nfts extends React.Component {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Background</InputLabel>
 
-                      {/* 背景 */}
+                      {/* background */}
                       <Select
                         name='background'
                         value={this.state.background}
@@ -279,7 +277,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 身体 */}
+                      {/* body */}
                       <InputLabel id="demo-simple-select-label">Body</InputLabel>
                       <Select
                         name='body'
@@ -298,7 +296,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 眼睛 */}
+                      {/* eyes */}
                       <InputLabel id="demo-simple-select-label">Eyes</InputLabel>
                       <Select
                         name='eyes'
@@ -317,7 +315,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 眼镜 */}
+                      {/* glass */}
                       <InputLabel id="demo-simple-select-label">Glass</InputLabel>
                       <Select
                         name='glass'
@@ -336,7 +334,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 嘴巴 */}
+                      {/* mouth */}
                       <InputLabel id="demo-simple-select-label">Mouth</InputLabel>
                       <Select
                         name='mouth'
@@ -352,7 +350,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 外套 */}
+                      {/* outfit */}
                       <InputLabel id="demo-simple-select-label">Outfit</InputLabel>
                       <Select
                         name='outfit'
@@ -373,7 +371,7 @@ class Nfts extends React.Component {
                     </FormControl>
 
                     <FormControl fullWidth>
-                      {/* 胡子 */}
+                      {/* bread */}
                       <InputLabel id="demo-simple-select-label">Beard</InputLabel>
                       <Select
                         name='beard'
@@ -409,7 +407,7 @@ class Nfts extends React.Component {
 
           <div className="nftHeaderButtonCreateNft1">
             <Button onClick={this.handleClickOpen1} color="success" disableRipple sx={{ "&:hover": { backgroundColor: "transparent" }, color: 'black', fontSize: 20, textTransform: 'none' }}> Type2</Button>
-            {/* 进度条 */}
+            {/* loading */}
             <Dialog
               open={this.state.open1}
               onClose={this.handleClose1}

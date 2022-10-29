@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { error, success } from '../utils/message.js'
 
 export default function ExploreBody() {
 
@@ -49,13 +50,13 @@ export default function ExploreBody() {
             method: "get",
             url: "/5620/nfts/" + page,
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 40011) {
             setListData(response.data.data)
 
         } else if (response.data.code === 40010) {
-            alert(response.data.msg)
+            error(response.data.msg)
         }
     }
 
@@ -64,13 +65,13 @@ export default function ExploreBody() {
             method: "get",
             url: "/5620/nfts/count",
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 40011) {
             setCount(response.data.data)
 
         } else if (response.data.code === 40010) {
-            alert(response.data.msg)
+            error(response.data.msg)
         }
     }
 
@@ -80,13 +81,13 @@ export default function ExploreBody() {
             url: "/5620/nfts/likes",
             data: item
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 30011) {
             handleRecommended();
 
         } else if (response.data.code === 30010) {
-            alert(response.data.msg)
+            error(response.data.msg)
         }
     }
 
@@ -97,13 +98,13 @@ export default function ExploreBody() {
             url: "/5620/follows",
             data: data
         }).catch(err => {
-            alert(err);
+            error(err);
         })
         if (response.data.code === 10011) {
-            alert(response.data.msg);
+            success(response.data.msg);
             handleClose();
         } else {
-            alert(response.data.msg);
+            error(response.data.msg);
             handleClose();
         }
     }

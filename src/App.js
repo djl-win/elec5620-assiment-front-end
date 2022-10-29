@@ -12,16 +12,18 @@ import Transaction from "./pages/Transaction";
 import Market from "./pages/Market";
 import Order from "./pages/Profile/Order";
 import Person from "./pages/Person";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <Router>
     <div className="App">
-      <Box sx={{ width: '100%' }}>
+      <Box >
         <Stack spacing={0.3}>
           <div>
             <HomeHeader />
+            <ToastContainer></ToastContainer>
           </div>
 
           <div className="footerPage">
@@ -38,10 +40,10 @@ function App() {
               <Route path="/person" component={Person}/>
               <Redirect to="/explore"></Redirect>
             </Switch>
+            
           </div>
         </Stack>
       </Box>
-
     </div>
    </Router>
 
