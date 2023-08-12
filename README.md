@@ -23,3 +23,7 @@ USYD 2022 S2 COMP5620 stage 2 Group 3 -- frontend
 
 ### Website:  
 http://localhost:8080/5620/pages/mIndex.html  
+
+## License
+
+This project is licensed under the GNU GPLv3 License - see the [LICENSE](https://github.com/djl-win/elec5620-assiment-front-end/blob/main/LICENSE) file for details.
